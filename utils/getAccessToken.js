@@ -13,14 +13,14 @@ const fileName = path.resolve(__dirname, './access_token.json')
 
 // 这两个参数的获取：微信公众平台>开发>开发设置
 const APPID = 'wxc4e0b2d98063b103'
-const APPSECRET = '0d76e18e2165d3658e5603517bb410fd' //小程序密钥，注意保密!
+const APPSECRET = '0d76e18e2165d3658e5603517bb410f' //小程序密钥，注意保密!
 
 // 微信 access_token 请求地址
-const URL = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${APPID}&secret=${APPSECRET}`
+const URL = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${APPID}&secret=${APPSECRET}d`
 
 // 发送请求获取AccessToken
 const updateAccessToken = async () => {
-  const resStr = await rp(URL)
+  const resStr = await rp(URL) // 发送http请求
   const res = JSON.parse(resStr)
 
   if (res.access_token) {
@@ -40,12 +40,26 @@ const getAccessToken = async () => {
      // node读取文件,参数：1 读取的文件，2 字符集
     const readRes = fs.readFileSync(fileName, 'utf8')
     const readObj = JSON.parse(readRes)
+
+    // 如果服务器宕机导致setInterval无法定时更新，这里需要再次判断access_token的有效性
+    const createTime = new Date(readObj.createTime).getTime()
+    const nowTime = new Date().getTime()
+    if((nowTime - createTime) > (7200 - 300) * 1000) {
+      await updateAccessToken()
+      await getAccessToken()
+      return
+    }
     return readObj.access_token
 
-  } catch (error) { //捕获异常，在未创建改文件时，先创建该文件
+  } catch (error) { //捕获异常，在未创建文件时，先创建文件
     await updateAccessToken()
     await getAccessToken()
   }
- 
 }
-console.log(getAccessToken())
+
+// access_token有效期为2个小时，定时更新
+setInterval(async () => {
+  await updateAccessToken()
+}, (7200 - 300) * 1000)
+
+module.exports = getAccessToken
