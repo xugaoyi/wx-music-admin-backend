@@ -2,13 +2,13 @@ const rp = require('request-promise') // node环境发送http请求的模块
 const getAccessToken = require('./getAccessToken') // 微信接口调用凭证
 
 /**
- * callCloudFn
- * @param {object} ctx 上下文
+ * callCloudFn 调用云函数方法
+ * @param {object} ctx 上下文，ctx.state.env云开发环境ID
  * @param {string} fnName 云函数名称
  * @param {object} params 传递给云函数的参数
  */
 const callCloudFn = async (ctx, fnName, params) => {
-    // HTTP API调用云函数，详情：https://developers.weixin.qq.com/miniprogram/dev/wxcloud/reference-http-api/functions/invokeCloudFunction.html
+    // HTTP API调用云函数，详见：https://developers.weixin.qq.com/miniprogram/dev/wxcloud/reference-http-api/functions/invokeCloudFunction.html
  
     const ACCESS_TOKEN = await getAccessToken() // 获取微信接口调用凭证
 
