@@ -13,7 +13,7 @@ const fileName = path.resolve(__dirname, './access_token.json')
 
 // 这两个参数的获取：微信公众平台>开发>开发设置
 const APPID = 'wxc4e0b2d98063b103'
-const APPSECRET = '' //小程序密钥，注意保密!
+const APPSECRET = '0d76e18e2165d3658e5603517bb410f' //小程序密钥，注意保密!
 
 // 微信 access_token 请求地址
 const URL = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${APPID}&secret=${APPSECRET}d`

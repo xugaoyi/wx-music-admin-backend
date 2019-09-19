@@ -28,7 +28,9 @@ app.use(async (ctx, next) => { // ctx 上下文，所以中间件都可访问其
 })
 
 const playlist = require('./controller/playlist.js')
+const swiper = require('./controller/swiper')
 router.use('/playlist', playlist.routes()) // 前端访问：http://localhost:3000/playlist + <playlist.js内部的子路由>
+router.use('/swiper', swiper.routes())
 
 app.use(router.routes()) // 使用路由
 app.use(router.allowedMethods()) // 允许使用方法
